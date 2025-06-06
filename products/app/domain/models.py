@@ -2,6 +2,6 @@ from dataclasses import dataclass
 
 @dataclass
 class Product:
-    id: init | None = None
+    id: int | None = None
     name: str = None
     price: int = None
