@@ -34,7 +34,7 @@ def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_db)):
     repository = get_repository(db)
     product = get_product_by_id(repository, product_id)
     if product is None:
-        return {"message": "Product not found"}
+        return {"details": "Product not found"}
     return {
         "data":{
             "type": "products",

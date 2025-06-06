@@ -1,5 +1,5 @@
 from app.domain.models import Product
-from app.application.use_cases import create_product
+from app.application.use_cases import create_product, get_product_by_id
 from app.domain.repositories import AbstractProductRepository
 
 class FakeRepository(AbstractProductRepository):
@@ -24,3 +24,12 @@ def test_create_product():
     product = Product(name="Test Product", price=10)
     create_product(repository, product)
     assert len(repository.products) == 1
+
+def test_get_product_by_id():
+    repository = FakeRepository()
+    product = Product(name="Test Product", price=10)
+    created_product = create_product(repository, product)
+    retrieved_product = get_product_by_id(repository, created_product.id)
+    assert retrieved_product is not None
+    assert retrieved_product.name == "Test Product"
+    assert retrieved_product.price == 10

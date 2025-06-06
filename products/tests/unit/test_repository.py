@@ -21,3 +21,17 @@ def test_create_product():
     assert created_product.id is not None
     assert created_product.name == "Test Product"
     assert created_product.price == 10
+
+def test_get_product_by_id():
+    db = get_test_db()
+    repository = ProductRepository(db)
+    product = Product(name="Test Product", price=10)
+    created_product = repository.create(product)
+
+    retrieved_product = repository.get_by_id(created_product.id)
+
+    assert retrieved_product is not None
+    assert retrieved_product.id == created_product.id
+    assert retrieved_product.name == "Test Product"
+    assert retrieved_product.price == 10
+    
