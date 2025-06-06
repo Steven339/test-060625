@@ -17,4 +17,4 @@ def test_create_product():
     repository = FakeRepository()
     product = Product(name="Test Product", price=10)
     create_product(repository, product)
-    assert len(db.products) == 1
+    assert len(repository.products) == 1

@@ -10,10 +10,7 @@ def get_test_db():
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    return db
 
 def test_create_product():
     db = get_test_db()

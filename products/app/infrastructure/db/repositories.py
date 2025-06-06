@@ -9,10 +9,17 @@ class ProductRepository(AbstractProductRepository):
         self.db = db
         
     def create(self, product: Product):
-        db_product = ProductDB(**product.dict())
+        db_product = ProductDB(
+            name=product.name,
+            price=product.price,
+        )
         self.db.add(db_product)
         self.db.commit()
         self.db.refresh(db_product)
-        return Product(**db_product.dict())
+        return Product(
+            id=db_product.id,
+            name=db_product.name,
+            price=db_product.price,
+        )
 
         
