@@ -1,6 +1,6 @@
 from app.domain.models import Product
 from app.application.use_cases import create_product
-from app.infrastructure.repositories import AbstractProductRepository
+from app.domain.repositories import AbstractProductRepository
 
 class FakeRepository(AbstractProductRepository):
     def __init__(self):
