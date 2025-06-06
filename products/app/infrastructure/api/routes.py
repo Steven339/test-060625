@@ -1,7 +1,8 @@
+from ctypes import sizeof
 from app.application.use_cases import create_product, get_product_by_id
 from app.domain.schemas import ProductCreate
 from app.infrastructure.db.session import SessionLocal
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 from app.infrastructure.db.repositories import ProductRepository
 
@@ -40,5 +41,21 @@ def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_db)):
             "type": "products",
             "id": product.id,
             "attributes": product
+        }
+    }
+
+@router.get("/products", response_model=dict)
+def get_products_endpoint(
+    page: int = Query(1, ge=1),
+    size: int = Query(10, ge=1, le=100),
+    db: Session = Depends(SessionLocal)
+):
+    repository = get_repository(db)
+    products = get_products(repository, page, size)
+    return {
+        "data":{
+            "type": "products",
+            "id": products.id,
+            "attributes": products
         }
     }

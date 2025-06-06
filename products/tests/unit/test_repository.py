@@ -34,4 +34,15 @@ def test_get_product_by_id():
     assert retrieved_product.id == created_product.id
     assert retrieved_product.name == "Test Product"
     assert retrieved_product.price == 10
-    
+
+def test_get_products():
+    db = get_test_db()
+    repository = ProductRepository(db)
+    product1 = Product(name="Test Product 1", price=10)
+    product2 = Product(name="Test Product 2", price=20)
+    repository.create(product1)
+    repository.create(product2)
+
+    products = repository.get_products()
+
+    assert len(products) == 2

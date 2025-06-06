@@ -7,3 +7,7 @@ def create_product(repository: AbstractProductRepository, product: Product):
 
 def get_product_by_id(repository: AbstractProductRepository, product_id: int):
     return repository.get_by_id(product_id)
+
+def get_products(repository: AbstractProductRepository, page: int, size: int):
+    return repository.get_all(page, size)
+    

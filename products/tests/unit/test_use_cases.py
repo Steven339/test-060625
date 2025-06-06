@@ -18,6 +18,9 @@ class FakeRepository(AbstractProductRepository):
             if product.id == product_id:
                 return product
         return None
+    
+    def get_all(self, page: int, size: int) -> list[Product]:
+        return self.products
 
 def test_create_product():
     repository = FakeRepository()
@@ -33,3 +36,12 @@ def test_get_product_by_id():
     assert retrieved_product is not None
     assert retrieved_product.name == "Test Product"
     assert retrieved_product.price == 10
+
+def test_get_products():
+    repository = FakeRepository()
+    product1 = Product(name="Test Product 1", price=10)
+    product2 = Product(name="Test Product 2", price=20)
+    create_product(repository, product1)
+    create_product(repository, product2)
+    products = get_products(repository)
+    assert len(products) == 2
