@@ -12,6 +12,6 @@ class ProductRepository:
         self.db.add(db_product)
         self.db.commit()
         self.db.refresh(db_product)
-        return db_product
+        return Product(**db_product.dict())
 
         
