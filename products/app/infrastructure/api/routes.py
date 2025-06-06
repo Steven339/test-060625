@@ -3,6 +3,7 @@ from app.domain.schemas import ProductCreate
 from app.infrastructure.db.session import SessionLocal
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from app.infrastructure.db.repositories import ProductRepository
 
 router = APIRouter()
 
@@ -15,7 +16,8 @@ def get_db():
 
 @router.post("/products", response_model=dict, status_code=status.HTTP_201_CREATED)
 def create_product(request: ProductCreate, db: Session = Depends(get_db)):  # noqa: F811
-    product = create_product(db, request)
+    repository = ProductRepository(db)
+    product = create_product(repository, request)
     return {
         "data":{
             "type": "products",
