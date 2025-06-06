@@ -13,6 +13,12 @@ class FakeRepository(AbstractProductRepository):
         self.id += 1
         return product
 
+    def get_by_id(self, product_id: int) -> Product:
+        for product in self.products:
+            if product.id == product_id:
+                return product
+        return None
+
 def test_create_product():
     repository = FakeRepository()
     product = Product(name="Test Product", price=10)
