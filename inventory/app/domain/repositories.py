@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from inventory.app.domain.models import Inventory
+from app.domain.models import Inventory
 
 class AbstractRepository(ABC):
     @abstractmethod
