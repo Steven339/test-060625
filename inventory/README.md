@@ -20,7 +20,7 @@ This project follows Clean Architecture principles, organizing code into the fol
 
 ## Project Structure
 ```
-products/
+inventory/
 ├── alembic/              # Database migrations
 ├── app/
 │   ├── application/      # Use cases and business logic
@@ -48,10 +48,10 @@ This project uses Alembic for database migrations:
 
 ```bash
 # Create a new migration
-docker-compose run --rm products alembic revision --autogenerate -m "description"
+docker-compose run --rm inventory alembic revision --autogenerate -m "description"
 
 # Apply migrations
-docker-compose run --rm products alembic upgrade head
+docker-compose run --rm inventory alembic upgrade head
 ```
 
 # Testing
