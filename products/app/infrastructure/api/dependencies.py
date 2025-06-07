@@ -22,7 +22,6 @@ def get_repository(db: Session):
 
 def verify_api_key(x_api_key: str = Header(...)):
     from app.config import API_KEY
-    logger.info("Verifying api key... %s, %s", x_api_key, API_KEY)
     if x_api_key != API_KEY:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

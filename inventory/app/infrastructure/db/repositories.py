@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
-from app.infrastructure.db.models import InventoryDB
+
 from app.domain.models import Inventory
 from app.domain.repositories import AbstractRepository
+from app.infrastructure.db.models import InventoryDB
+
 
 class InventoryRepository(AbstractRepository):
     def __init__(self, db: Session):
@@ -20,4 +22,9 @@ class InventoryRepository(AbstractRepository):
             self.db.commit()
             self.db.refresh(db_inventory)
             return Inventory(product_id=db_inventory.product_id, quantity=db_inventory.quantity)
-        return None
+        else:
+            db_inventory = InventoryDB(product_id=inventory.product_id, quantity=inventory.quantity)
+            self.db.add(db_inventory)
+            self.db.commit()
+            self.db.refresh(db_inventory)
+            return Inventory(product_id=db_inventory.product_id, quantity=db_inventory.quantity)

@@ -1,7 +1,9 @@
-from app.application.use_cases import get_inventory, update_inventory
-from app.infrastructure.api.dependencies import get_db, get_repository
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
+from app.application.use_cases import get_inventory, update_inventory
+from app.domain.schemas import InventoryOut
+from app.infrastructure.api.dependencies import get_db, get_repository
 
 router = APIRouter()
 
@@ -10,64 +12,58 @@ router = APIRouter()
 def get_inventory_endpoint(product_id: int, db: Session = Depends(get_db)):
     try:
         repository = get_repository(db)
-        inventory = get_inventory(repository, product_id)
+        product, inventory = get_inventory(repository, product_id)
         if inventory:
             return {
-                "data": {
-                    "type": "inventory",
-                    "id": product_id,
-                    "attributes": {
-                        "quantity": inventory.quantity
-                    }
-                }
-            }
-    except ValueError as e:
-        return {
-            "data": {
-                "type": "error",
+                "type": "inventory",
                 "id": product_id,
-                "attributes": {
-                    "message": str(e)
-                },
+                "attributes": InventoryOut(
+                    name=product.name,
+                    price=product.price,
+                    quantity=inventory.quantity
+                )
             }
-        }
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail="Inventory not found"
+            )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
 
-    
 
 @router.post("/inventory/{product_id}", tags=["Inventory"])
 def update_inventory_endpoint(product_id: int, quantity: int, db: Session = Depends(get_db)):
     try:
         repository = get_repository(db)
-        inventory = update_inventory(repository, product_id, quantity)
+        product ,inventory = update_inventory(repository, product_id, quantity)
         if inventory:
             return {
-                "data": {
-                    "type": "inventory",
-                    "id": product_id,
-                    "attributes": {
-                        "quantity": inventory.quantity
-                    }
-                }
+                "type": "inventory",
+                "id": product_id,
+                "attributes": InventoryOut(
+                    name=product.name,
+                    price=product.price,
+                    quantity=inventory.quantity
+                )
             }
     except ValueError as e:
-        return {
-            "data": {
-                "type": "error",
-                "id": product_id,
-                "attributes": {
-                    "message": str(e)
-                },
-            }
-        }
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+
 
 @router.get("/health", tags=["System"])
 def health_check():
     return {
-        "data": {
-            "type": "health",
-            "id": "status",
-            "attributes": {
-                "status": "ok"
-            }
+        "type": "health",
+        "id": "status",
+        "attributes": {
+            "status": "ok"
         }
     }
+
