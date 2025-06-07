@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Sessionq
+from sqlalchemy.orm import Session
 from app.infrastructure.db.models import InventoryDB
 from app.domain.models import Inventory
 from inventory.app.domain.repositories import AbstractRepository
