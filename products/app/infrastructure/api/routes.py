@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
+
 @router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED)
 async def create_product_endpoint(request: ProductCreate, db: Session = Depends(get_db)):
     repository = get_repository(db)
@@ -84,3 +85,16 @@ async def delete_product_endpoint(
             detail="Product not found"
         )
     delete_product(repository, product_id)
+
+
+@router.get("/health", tags=["System"])
+def health_check():
+    return {
+        "data": {
+            "type": "health",
+            "id": "status",
+            "attributes": {
+                "status": "ok"
+            }
+        }
+    }
