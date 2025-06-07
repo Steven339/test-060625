@@ -5,3 +5,11 @@ class AbstractProductRepository(ABC):
     @abstractmethod
     def create(self, product: Product) -> Product:
         raise NotImplementedError
+
+    @abstractmethod
+    def get_by_id(self, product_id: int) -> Product:
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_all(self, page: int, size: int) -> list[Product]:
+        raise NotImplementedError
