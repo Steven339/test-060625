@@ -43,3 +43,32 @@ def test_get_products(client):
     assert found["type"] == "products"
     assert found["attributes"]["name"] == "Pantalón"
     assert found["attributes"]["price"] == 89.5
+
+def test_update_product(client):
+    response = client.post("/products", json={
+        "name": "Pantalón",
+        "price": 89.5
+    })
+    assert response.status_code == 201
+    data = response.json()["data"]
+    product_id = data["id"]
+    response = client.put(f"/products/{product_id}", json={
+        "name": "Pantalón",
+        "price": 99.5
+    })
+    assert response.status_code == 200
+    data = response.json()["data"]
+    assert data["type"] == "products"
+    assert data["attributes"]["name"] == "Pantalón"
+    assert data["attributes"]["price"] == 99.5
+
+def test_delete_product(client):
+    response = client.post("/products", json={
+        "name": "Pantalón",
+        "price": 89.5
+    })
+    assert response.status_code == 201
+    data = response.json()["data"]
+    product_id = data["id"]
+    response = client.delete(f"/products/{product_id}")
+    assert response.status_code == 204

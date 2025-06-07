@@ -45,3 +45,31 @@ def test_get_products():
     products = repository.get_all(1, 10)
 
     assert len(products) == 2
+
+def test_update_product():
+    db = get_test_db()
+    repository = ProductRepository(db)
+    product = Product(name="Test Product", price=10)
+    created_product = repository.create(product)
+
+    updated_product = Product(id=created_product.id, name="Updated Product", price=20)
+    repository.update(updated_product)
+
+    retrieved_product = repository.get_by_id(created_product.id)
+
+    assert retrieved_product is not None
+    assert retrieved_product.id == created_product.id
+    assert retrieved_product.name == "Updated Product"
+    assert retrieved_product.price == 20
+
+def test_delete_product():
+    db = get_test_db()
+    repository = ProductRepository(db)
+    product = Product(name="Test Product", price=10)
+    created_product = repository.create(product)
+
+    repository.delete(created_product.id)
+
+    retrieved_product = repository.get_by_id(created_product.id)
+
+    assert retrieved_product is None
