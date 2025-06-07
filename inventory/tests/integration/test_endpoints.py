@@ -1,9 +1,10 @@
-import httpx
-from app.config import PRODUCTS_API_KEY
 from unittest.mock import patch
 
+import httpx
+from app.config import API_KEY
+
 HEADERS = {
-    "x-api-key": PRODUCTS_API_KEY
+    "x-api-key": API_KEY
 }
 
 @patch("app.application.use_cases.httpx.get")
@@ -41,7 +42,7 @@ def test_update_inventory(mock_get, client):
             "price": 99.99
         }
     }})
-    response = client.post(f"/inventory/1?quantity=10", headers=HEADERS)
+    response = client.post("/inventory/1?quantity=10", headers=HEADERS)
     assert response.status_code == 200
     data = response.json()["data"]
     assert data["type"] == "inventory"
