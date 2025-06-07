@@ -34,7 +34,7 @@ def test_get_products(client):
     assert response.status_code == 201
     data = response.json()["data"]
     product_id = data["id"]
-    response = client.get(f"/products")
+    response = client.get("/products")
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data) == 1

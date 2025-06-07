@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from typing import List
 
 
 class ProductBase(BaseModel):
@@ -7,11 +8,3 @@ class ProductBase(BaseModel):
 
 class ProductCreate(ProductBase):
     pass
-
-class ProductOut(ProductBase):
-    id: int
-    name: str
-    price: float
-
-    class ConfigDict:
-        from_attributes = True

@@ -1,5 +1,5 @@
 from app.domain.models import Product
-from app.application.use_cases import create_product, get_product_by_id
+from app.application.use_cases import create_product, get_product_by_id, get_products
 from app.domain.repositories import AbstractProductRepository
 
 class FakeRepository(AbstractProductRepository):
@@ -43,5 +43,5 @@ def test_get_products():
     product2 = Product(name="Test Product 2", price=20)
     create_product(repository, product1)
     create_product(repository, product2)
-    products = get_products(repository)
+    products = get_products(repository, 1, 10)
     assert len(products) == 2

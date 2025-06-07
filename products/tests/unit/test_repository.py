@@ -43,6 +43,6 @@ def test_get_products():
     repository.create(product1)
     repository.create(product2)
 
-    products = repository.get_products()
+    products = repository.get_all(1, 10)
 
     assert len(products) == 2
