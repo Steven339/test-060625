@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  db:
+  products_db:
     image: postgres
     restart: always
     environment:
@@ -11,7 +11,19 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_products:/var/lib/postgresql/data
+
+  inventory_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: inventory
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_inventory:/var/lib/postgresql/data
 
   products:
     build: ./products
@@ -21,7 +33,18 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - products_db
+
+  inventory:
+    build: ./inventory
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001
+    volumes:
+      - ./inventory:/app
+    ports:
+      - "8001:8001"
+    depends_on:
+      - inventory_db
 
 volumes:
-  postgres_data:
+  postgres_products:
+  postgres_inventory:
