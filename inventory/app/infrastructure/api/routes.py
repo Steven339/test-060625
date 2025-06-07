@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.infrastructure.api.dependencies import get_db, get_repository
 from app.application.use_cases import get_inventory, update_inventory
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
