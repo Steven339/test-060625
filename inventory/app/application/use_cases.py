@@ -10,6 +10,7 @@ from tenacity import (
 )
 
 from app.domain.models import Inventory, Product
+from app.application.event_publisher import publish_event
 from app.domain.repositories import AbstractRepository
 
 logger = logging.getLogger(__name__)
@@ -54,5 +55,6 @@ def update_inventory(repository: AbstractRepository, product_id: int, quantity: 
     product = check_product(product_id)
     db_inventory = repository.update(Inventory(product_id=product_id, quantity=quantity))
     if db_inventory:
+        publish_event("inventory-updated", {"product_id": product_id, "quantity": quantity})
         return product, Inventory(product_id=db_inventory.product_id, quantity=db_inventory.quantity)
     return product, Inventory(product_id=product_id, quantity=0)
