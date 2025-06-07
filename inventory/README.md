@@ -18,6 +18,25 @@ This project follows Clean Architecture principles, organizing code into the fol
 - `app/infrastructure/api/`: FastAPI routes and API configuration
 - `app/infrastructure/db/`: Database models and implementations
 
+## Architecture Diagram
+
+```mermaid
+graph LR
+    A[Client] --> B[API Gateway]
+    B --> C[FastAPI]
+    C --> D[Application Layer]
+    D --> E[Use Cases]
+    E --> F[Domain Layer]
+    F --> G[Models]
+    F --> H[Repositories]
+    F --> I[Schemas]
+    C --> J[Infrastructure Layer]
+    J --> K[API Routes]
+    J --> L[DB Models]
+    J --> M[DB Implementations]
+    F --> N[Database]
+```
+
 ## Project Structure
 ```
 inventory/
