@@ -46,3 +46,11 @@ def test_update_inventory(mock_get, client):
     assert data["attributes"]["name"] == "Zapato"
     assert data["attributes"]["price"] == 99.99
     assert data["attributes"]["quantity"] == 10
+
+@patch("app.application.use_cases.httpx.get")
+def test_get_inventory_not_found_with_retry(mock_get, client):
+    mock_get.return_value = httpx.Response(status_code=404, json={"detail": "Not Found"})
+    response = client.get("/inventory/1", headers=HEADERS)
+    assert response.status_code == 400
+    data = response.json()
+    assert data["detail"] == "Product not found"
