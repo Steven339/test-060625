@@ -32,4 +32,14 @@ class ProductRepository(AbstractProductRepository):
             price=db_product.price,
         )
 
+    def get_all(self, page: int, size: int):
+        db_products = self.db.query(ProductDB).offset((page - 1) * size).limit(size).all()
+        return [
+            Product(
+                id=db_product.id,
+                name=db_product.name,
+                price=db_product.price,
+            )
+            for db_product in db_products
+        ]
         
