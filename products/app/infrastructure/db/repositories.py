@@ -21,25 +21,5 @@ class ProductRepository(AbstractProductRepository):
             name=db_product.name,
             price=db_product.price,
         )
-    
-    def get_by_id(self, product_id: int):
-        db_product = self.db.query(ProductDB).filter(ProductDB.id == product_id).first()
-        if db_product is None:
-            return None
-        return Product(
-            id=db_product.id,
-            name=db_product.name,
-            price=db_product.price,
-        )
 
-    def get_all(self, page: int, size: int):
-        db_products = self.db.query(ProductDB).offset((page - 1) * size).limit(size).all()
-        return [
-            Product(
-                id=db_product.id,
-                name=db_product.name,
-                price=db_product.price,
-            )
-            for db_product in db_products
-        ]
         
