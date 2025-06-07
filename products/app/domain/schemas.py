@@ -11,7 +11,6 @@ class ProductCreate(ProductBase):
     pass
 
 class ProductOut(ProductBase):
-    id: int
 
     class ConfigDict:
         from_attributes = True
@@ -19,13 +18,13 @@ class ProductOut(ProductBase):
     @classmethod
     def from_orm(cls, db_product: ProductDB):
         return cls(
-            id=db_product.id,
             name=db_product.name,
             price=db_product.price
         )
 
 class ProductResponse(BaseModel):
     type: str = "products"
+    id : int
     attributes: ProductOut
 
     class ConfigDict:

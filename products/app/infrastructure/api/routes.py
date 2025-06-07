@@ -1,28 +1,17 @@
 from app.application.use_cases import create_product, get_product_by_id, get_products
 from app.domain.schemas import ProductCreate, ProductDataResponse, ProductResponse, ProductListResponse, ProductOut, ProductMeta
-from app.infrastructure.db.session import SessionLocal
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
-from app.infrastructure.db.repositories import ProductRepository
+from app.infrastructure.api.dependencies import get_db, get_repository
 
 router = APIRouter()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-def get_repository(db: Session):
-    return ProductRepository(db)
 
 @router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED)
 async def create_product_endpoint(request: ProductCreate, db: Session = Depends(get_db)):
     repository = get_repository(db)
     product = create_product(repository, request)
     product_out = ProductOut.from_orm(product)
-    return ProductDataResponse(data=ProductResponse(type="products", attributes=product_out))
+    return ProductDataResponse(data=ProductResponse(type="products", id=product.id, attributes=product_out))
 
 @router.get("/products/{product_id}", response_model=ProductDataResponse)
 async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_db)):
@@ -34,7 +23,7 @@ async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_
             detail="Product not found"
         )
     product_out = ProductOut.from_orm(product)
-    return ProductDataResponse(data=ProductResponse(type="products", attributes=product_out))
+    return ProductDataResponse(data=ProductResponse(type="products", id=product.id ,attributes=product_out))
 
 @router.get("/products", response_model=ProductListResponse)
 async def get_products_endpoint(
@@ -50,6 +39,7 @@ async def get_products_endpoint(
         data=[
             ProductResponse(
                 type="products",
+                id=p.id,
                 attributes=ProductOut.from_orm(p)
             ) for p in products
         ],

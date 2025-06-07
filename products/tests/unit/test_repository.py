@@ -6,11 +6,10 @@ from sqlalchemy.orm import sessionmaker
 
 
 def get_test_db():
-    engine = create_engine("sqlite:///:memory:", echo=False)
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    return db
+    return SessionLocal()
 
 def test_create_product():
     db = get_test_db()
