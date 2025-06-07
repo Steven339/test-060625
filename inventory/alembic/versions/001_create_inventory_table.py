@@ -7,9 +7,8 @@ Create Date: 2025-06-07
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic
 revision: str = '001'
@@ -21,11 +20,10 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table(
         'inventory',
-        sa.Column('id', sa.Integer, primary_key=True, index=True),
-        sa.Column('product_id', sa.Integer, index=True),
+        sa.Column('product_id', sa.Integer, primary_key=True, index=True),
         sa.Column('quantity', sa.Integer, index=True),
     )
-    op.create_index('idx_inventory_product_id', 'inventory', ['product_id'])
+    op.create_index(op.f('idx_inventory_product_id'), 'inventory', ['product_id'], unique=False)
 
 
 def downgrade() -> None:

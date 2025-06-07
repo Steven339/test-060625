@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
-from app.infrastructure.api.dependencies import get_db, get_repository
 from app.application.use_cases import get_inventory, update_inventory
+from app.infrastructure.api.dependencies import get_db, get_repository
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -33,7 +33,7 @@ def get_inventory_endpoint(product_id: int, db: Session = Depends(get_db)):
     
 
 @router.post("/inventory/{product_id}", tags=["Inventory"])
-def update_inventory_endpoint(product_id: int, quantity: int):
+def update_inventory_endpoint(product_id: int, quantity: int, db: Session = Depends(get_db)):
     repository = get_repository(db)
     inventory = update_inventory(repository, product_id, quantity)
     if inventory:
