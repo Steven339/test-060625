@@ -10,18 +10,21 @@ router = APIRouter()
 
 @router.get("/inventory/{product_id}", tags=["Inventory"])
 def get_inventory_endpoint(product_id: int, db: Session = Depends(get_db)):
+    print("get_inventory_endpoint")
     try:
         repository = get_repository(db)
         product, inventory = get_inventory(repository, product_id)
         if inventory:
             return {
-                "type": "inventory",
-                "id": product_id,
-                "attributes": InventoryOut(
-                    name=product.name,
-                    price=product.price,
-                    quantity=inventory.quantity
-                )
+                "data": {
+                    "type": "inventory",
+                    "id": product_id,
+                    "attributes": InventoryOut(
+                        name=product.name,
+                        price=product.price,
+                        quantity=inventory.quantity
+                    )
+                }
             }
         else:
             raise HTTPException(
@@ -42,13 +45,15 @@ def update_inventory_endpoint(product_id: int, quantity: int, db: Session = Depe
         product ,inventory = update_inventory(repository, product_id, quantity)
         if inventory:
             return {
-                "type": "inventory",
-                "id": product_id,
-                "attributes": InventoryOut(
-                    name=product.name,
-                    price=product.price,
-                    quantity=inventory.quantity
-                )
+                "data": {
+                    "type": "inventory",
+                    "id": product_id,
+                    "attributes": InventoryOut(
+                        name=product.name,
+                        price=product.price,
+                        quantity=inventory.quantity
+                    )
+                }
             }
     except ValueError as e:
         raise HTTPException(

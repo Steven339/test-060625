@@ -47,7 +47,7 @@ def get_inventory(repository: AbstractRepository, product_id: int) -> tuple[Prod
     inventory = repository.get(product_id)
     if inventory:
         return product, Inventory(product_id=inventory.product_id, quantity=inventory.quantity)
-    return None, None
+    return product, Inventory(product_id=product_id, quantity=0)
 
 def update_inventory(repository: AbstractRepository, product_id: int, quantity: int) -> tuple[Product, Inventory]:
     """ Update inventory """
@@ -55,4 +55,4 @@ def update_inventory(repository: AbstractRepository, product_id: int, quantity: 
     db_inventory = repository.update(Inventory(product_id=product_id, quantity=quantity))
     if db_inventory:
         return product, Inventory(product_id=db_inventory.product_id, quantity=db_inventory.quantity)
-    return None
+    return product, Inventory(product_id=product_id, quantity=0)
