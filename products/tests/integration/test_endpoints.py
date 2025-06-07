@@ -4,6 +4,10 @@ HEADERS = {
     "x-api-key": API_KEY
 }
 
+def test_x_api_key_invalid(client):
+    response = client.get("/products", headers={"x-api-key": "invalid"})
+    assert response.status_code == 401
+
 def test_create_product(client):
     response = client.post("/products", json={
         "name": "Pantalón",

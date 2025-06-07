@@ -7,6 +7,10 @@ HEADERS = {
     "x-api-key": API_KEY
 }
 
+def test_x_api_key_invalid(client):
+    response = client.get("/inventory/1", headers={"x-api-key": "invalid"})
+    assert response.status_code == 401
+
 @patch("app.application.use_cases.httpx.get")
 def test_get_inventory(mock_get, client):
     mock_get.return_value = httpx.Response(status_code=200, json={"data": {
