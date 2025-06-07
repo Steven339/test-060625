@@ -1,3 +1,6 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
 from app.application.use_cases import (
     create_product,
     delete_product,
@@ -13,13 +16,11 @@ from app.domain.schemas import (
     ProductOut,
     ProductResponse,
 )
-from app.infrastructure.api.dependencies import get_db, get_repository
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from app.infrastructure.api.dependencies import get_db, get_repository, verify_api_key
 
 router = APIRouter()
 
-@router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED, tags=["Products"])
+@router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED, tags=["Products"], dependencies=[Depends(verify_api_key)])
 async def create_product_endpoint(request: ProductCreate, db: Session = Depends(get_db)):
     repository = get_repository(db)
     try:
@@ -32,7 +33,7 @@ async def create_product_endpoint(request: ProductCreate, db: Session = Depends(
             detail="Product could not be created"
         )
 
-@router.get("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"])
+@router.get("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"], dependencies=[Depends(verify_api_key)])
 async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_db)):
     repository = get_repository(db)
     try:
@@ -50,7 +51,7 @@ async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_
             detail="Product not found"
         )
 
-@router.get("/products", response_model=ProductListResponse, tags=["Products"])
+@router.get("/products", response_model=ProductListResponse, tags=["Products"], dependencies=[Depends(verify_api_key)])
 async def get_products_endpoint(
     page: int = 1,
     size: int = 10,
@@ -80,7 +81,7 @@ async def get_products_endpoint(
             detail="Could not retrieve products"
         )
 
-@router.put("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"])
+@router.put("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"], dependencies=[Depends(verify_api_key)])
 async def update_product_endpoint(
     product_id: int,
     request: ProductCreate,
@@ -105,7 +106,7 @@ async def update_product_endpoint(
             detail="Product could not be updated"
         )
 
-@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Products"])
+@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Products"], dependencies=[Depends(verify_api_key)])
 async def delete_product_endpoint(
     product_id: int,
     db: Session = Depends(get_db)
