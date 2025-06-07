@@ -9,12 +9,12 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.info("Loading products API...")
-
+logger.info("Loading inventory API...")
 
 app = FastAPI(
-    title="Products API",
-    description="API for products",
-    version="1.0.0"
+    title="Inventory API",
+    description="API for managing inventory",
+    version="1.0.0",
 )
+
 app.include_router(router)

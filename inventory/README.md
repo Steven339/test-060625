@@ -1,6 +1,6 @@
-# Products Service
+# Inventory service
 
-A FastAPI-based microservice for managing products with a clean architecture approach.
+A FastAPI-based microservice for managing inventory with a clean architecture approach.
 
 ## Architecture
 
@@ -39,7 +39,7 @@ graph LR
 
 ## Project Structure
 ```
-products/
+inventory/
 ├── alembic/              # Database migrations
 ├── app/
 │   ├── application/      # Use cases and business logic
@@ -67,26 +67,25 @@ This project uses Alembic for database migrations:
 
 ```bash
 # Create a new migration
-docker-compose run --rm products alembic revision --autogenerate -m "description"
+docker-compose run --rm inventory alembic revision --autogenerate -m "description"
 
 # Apply migrations
-docker-compose run --rm products alembic upgrade head
+docker-compose run --rm inventory alembic upgrade head
 ```
 
-## Testing
+# Testing
 
 Run tests using:
 
 ```bash
 # Run all tests
-docker-compose run --rm products pytest
-
+docker-compose run --rm inventory pytest
 # Run with coverage
-docker-compose run --rm products pytest --cov=app
+docker-compose run --rm inventory pytest --cov=app
 
 # Run specific test types
-docker-compose run --rm products pytest tests/unit/
-docker-compose run --rm products pytest tests/integration/
+docker-compose run --rm inventory pytest tests/unit/
+docker-compose run --rm inventory pytest tests/integration/
 ```
 
 ## API Documentation
