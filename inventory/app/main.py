@@ -9,12 +9,7 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 logger.info("Loading inventory API...")
-
-import os
-
-print("PRODUCTS_API_KEY:", os.getenv("PRODUCTS_API_KEY"))
 
 app = FastAPI(
     title="Inventory API",
