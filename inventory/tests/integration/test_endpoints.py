@@ -1,8 +1,10 @@
+import httpx
+from app.config import PRODUCTS_API_KEY
 from unittest.mock import patch
 
-import httpx
-
-HEADERS = {"x-api-key": "supersecreta123"}
+HEADERS = {
+    "x-api-key": PRODUCTS_API_KEY
+}
 
 @patch("app.application.use_cases.httpx.get")
 def test_get_inventory(mock_get, client):

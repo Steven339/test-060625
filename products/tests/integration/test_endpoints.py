@@ -1,7 +1,7 @@
-import os
+from app.config import API_KEY
 
 HEADERS = {
-    "x-api-key": os.getenv("API_KEY")
+    "x-api-key": API_KEY
 }
 
 def test_create_product(client):
