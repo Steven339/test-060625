@@ -3,7 +3,6 @@ import logging
 from fastapi import Header, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.config import API_KEY
 from app.infrastructure.db.repositories import ProductRepository
 from app.infrastructure.db.session import SessionLocal
 
@@ -22,6 +21,7 @@ def get_repository(db: Session):
 
 
 def verify_api_key(x_api_key: str = Header(...)):
+    from app.config import API_KEY
     logger.info("Verifying api key... %s, %s", x_api_key, API_KEY)
     if x_api_key != API_KEY:
         raise HTTPException(
