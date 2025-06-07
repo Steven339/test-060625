@@ -1,6 +1,7 @@
+from app.infrastructure.db.repositories import ProductRepository
 from app.infrastructure.db.session import SessionLocal
 from sqlalchemy.orm import Session
-from app.infrastructure.db.repositories import ProductRepository
+
 
 def get_db():
     db = SessionLocal()

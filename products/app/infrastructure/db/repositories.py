@@ -1,7 +1,7 @@
 from app.domain.models import Product
+from app.domain.repositories import AbstractProductRepository
 from app.infrastructure.db.models import ProductDB
 from sqlalchemy.orm import Session
-from app.domain.repositories import AbstractProductRepository
 
 
 class ProductRepository(AbstractProductRepository):

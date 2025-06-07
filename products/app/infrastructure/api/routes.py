@@ -1,21 +1,33 @@
-from app.application.use_cases import create_product, get_product_by_id, get_products, update_product, delete_product
-from app.domain.schemas import ProductCreate, ProductDataResponse, ProductResponse, ProductListResponse, ProductOut, ProductMeta
-from fastapi import APIRouter, Depends, status, HTTPException
-from sqlalchemy.orm import Session
+from app.application.use_cases import (
+    create_product,
+    delete_product,
+    get_product_by_id,
+    get_products,
+    update_product,
+)
+from app.domain.schemas import (
+    ProductCreate,
+    ProductDataResponse,
+    ProductListResponse,
+    ProductMeta,
+    ProductOut,
+    ProductResponse,
+)
 from app.infrastructure.api.dependencies import get_db, get_repository
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 
-@router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/products", response_model=ProductDataResponse, status_code=status.HTTP_201_CREATED, tags=["Products"])
 async def create_product_endpoint(request: ProductCreate, db: Session = Depends(get_db)):
     repository = get_repository(db)
     product = create_product(repository, request)
     product_out = ProductOut.from_orm(product)
     return ProductDataResponse(data=ProductResponse(type="products", id=product.id, attributes=product_out))
 
-@router.get("/products/{product_id}", response_model=ProductDataResponse)
+@router.get("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"])
 async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_db)):
     repository = get_repository(db)
     product = get_product_by_id(repository, product_id)
@@ -27,7 +39,7 @@ async def get_product_by_id_endpoint(product_id: int, db: Session = Depends(get_
     product_out = ProductOut.from_orm(product)
     return ProductDataResponse(data=ProductResponse(type="products", id=product.id ,attributes=product_out))
 
-@router.get("/products", response_model=ProductListResponse)
+@router.get("/products", response_model=ProductListResponse, tags=["Products"])
 async def get_products_endpoint(
     page: int = 1,
     size: int = 10,
@@ -52,7 +64,7 @@ async def get_products_endpoint(
         )
     )
 
-@router.put("/products/{product_id}", response_model=ProductDataResponse)
+@router.put("/products/{product_id}", response_model=ProductDataResponse, tags=["Products"])
 async def update_product_endpoint(
     product_id: int,
     request: ProductCreate,
@@ -72,7 +84,7 @@ async def update_product_endpoint(
     return ProductDataResponse(data=ProductResponse(type="products", id=updated_product.id, attributes=product_out))
 
 
-@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/products/{product_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Products"])
 async def delete_product_endpoint(
     product_id: int,
     db: Session = Depends(get_db)
@@ -97,4 +109,5 @@ def health_check():
                 "status": "ok"
             }
         }
-    }
+    } 
+
