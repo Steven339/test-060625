@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.get("/inventory/{product_id}", tags=["Inventory"], dependencies=[Depends(verify_api_key)])
 def get_inventory_endpoint(product_id: int, db: Session = Depends(get_db)):
-    print("get_inventory_endpoint")
     try:
         repository = get_repository(db)
         product, inventory = get_inventory(repository, product_id)
