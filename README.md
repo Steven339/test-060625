@@ -10,8 +10,7 @@ products/
 ```
 
 ### Diagram integration between microservices, inventory request to products to verify if the product exists and get information about it
-```
-mermaid
+```mermaid
 graph LR
     A[Inventory] -->|Request product information| B[Products]
     B -->|Product exists?| A
