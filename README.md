@@ -9,7 +9,10 @@ inventory/
 products/
 ```
 
-### Diagram integration between microservices, inventory request to products to verify if the product exists and get information about it
+### Integration diagram between microservices 
+
+Inventory request to products to verify if the product exists and get information about it
+
 ```mermaid
 sequenceDiagram
     participant Inventory
