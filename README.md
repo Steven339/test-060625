@@ -12,9 +12,11 @@ products/
 ### Diagram integration between microservices, inventory request to products to verify if the product exists and get information about it
 ```mermaid
 sequenceDiagram
-    A[Inventory] --> B[Products]
-    B --> A: Verify if product exists
-    B --> A: Get product information
+    participant Inventory
+    participant Products
+    Inventory->>Products: Check if product exists, GET /products/:id
+    Products-->>Inventory: 200 OK, Return product information
+
 ```
 
 
